@@ -1,0 +1,14 @@
+{# templates/election/create.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Election{% endblock %}
+
+{% block body %}
+    <h1>Create Election</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">Create Election</button>
+    {{ form_end(form) }}
+{% endblock %}
