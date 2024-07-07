@@ -23,4 +23,5 @@ services:
     # add more service definitions when explicit configuration is needed
     App\Service\DataStorageService: ~
     # please note that last definitions always *replace* previous ones
-
+    App\Command\GenerateEntitiesCommand:
+            tags: ['console.command']

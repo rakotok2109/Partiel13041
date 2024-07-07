@@ -101,9 +101,11 @@ class ElectionController extends AbstractController
         $numberWinners = $election->getNumberWinners();
 
         $votesCount = [];
+        $propositionsRepository = $this->entityManager->getRepository(Proposition::class);
         /*Chaque Bulletin va être parcouru ainsi que chaque Proposition dans chaque Bulletin*/
         foreach ($bulletins as $bulletin) {
-            foreach ($bulletin->getChoice() as $proposition) {
+            foreach ($bulletin->getChoice() as $propositionName) {
+                $proposition = $propositionsRepository->findOneBy(['name' => $propositionName]);
                 $propositionId = $proposition->getId();
                 if (!isset($votesCount[$propositionId])) {
                     $votesCount[$propositionId] = 0;
@@ -136,35 +138,50 @@ class ElectionController extends AbstractController
             foreach ($bulletins as $bulletin) {
                 /* Les propositions dans chaque Bulletin sont récupérés et stocké dans la variable $choices*/
                 $choices = $bulletin->getChoice();
-                if (!empty($choices) && $choices[0]->getId() == $propositionId) {
+                $proposition = $propositionsRepository->findOneBy(['name' => reset($choices)]);
+                if ($proposition && $proposition->getId() == $propositionId) {
                     array_shift($choices); /* Suppression des choix déjà gagnants pour ne pas redistribuer au mauvais*/
-                    foreach ($choices as $choice) {
-                        $nextPropositionId = $choice->getId();
+                    foreach ($choices as $choiceName) {
+                        $nextProposition = $propositionsRepository->findOneBy(['name' => $choiceName]);
                         /*Si aucun vote n'avait été attribué à la proposition suivante, un compteur est initialisé*/
-                        if (!isset($votesCount[$nextPropositionId])) {
-                            $votesCount[$nextPropositionId] = 0;
+                        if ($nextProposition) {
+                            $nextPropositionId = $nextProposition->getId();
+                            if (!isset($votesCount[$nextPropositionId])) {
+                                $votesCount[$nextPropositionId] = 0;
+                            }
+                            $votesCount[$nextPropositionId] += $excess; // Redistribue les votes excédentaires
+                            break;
                         }
-                        $votesCount[$nextPropositionId] += $excess;
-                        break;
                     }
                 }
             }
         }
     
-        /* Trie à nouveau les votes restants après redistribution*/
+        /* Trie à nouveau les votes restants après redistribution */
         arsort($votesCount);
+
+        /* Vérifie si tous les candidats ont le même nombre de votes */
+        $allSameVotes = count(array_unique($votesCount)) === 1;
+
+        /* Sélectionne les gagnants jusqu'à atteindre le nombre souhaité */
+        $potentialWinners = array_keys($votesCount);
+        if ($allSameVotes) {
+            shuffle($potentialWinners); /* Mélange les propositions pour récupérer des gagnants aléatoire si le nombre de vote est identique */
+        }
     
-        /* Continue de sélectionner les gagnants jusqu'à atteindre le nombre souhaité*/
-        foreach ($votesCount as $propositionId => $votes) {
+
+        /* Récupération des gagnants */
+        
+        $winners = [];
+        foreach ($potentialWinners as $propositionId) {
             if (count($winners) >= $numberWinners) {
                 break;
             }
-            if ($votes >= $quota && !in_array($propositionId, $winners)) {
+            if (!in_array($propositionId, $winners)) {
                 $winners[] = $propositionId;
             }
         }
 
-    /* Récupération des gagnants */
     $propositionsRepository = $this->entityManager->getRepository(Proposition::class);
     $winningPropositions = [];
     foreach ($winners as $winnerId) {

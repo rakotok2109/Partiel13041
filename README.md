@@ -30,5 +30,9 @@ Le script la créera avec les données fictives automatiquement sinon il faudra 
 
 **symfony console doctrine:migrations:migrate**
 
+Il y a aussi une Commande pour créer les élections ainsi que les propositions et générer des bulletins aléatoires, cela devrait se faire
+à l'exécution du script sinon voici ce qu'il faut taper dans git bash : 
+
+**symfony console app:generation-entities**
 
 # Bonne Correction
