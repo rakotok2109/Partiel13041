@@ -2,10 +2,10 @@
 
 namespace App\Form;
 
-use App\Entity\Bulletin;
-use App\Entity\Election;
 use App\Entity\Proposition;
+use App\Entity\Election;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,15 +16,6 @@ class PropositionType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('election', EntityType::class, [
-                'class' => Election::class,
-                'choice_label' => 'id',
-            ])
-            ->add('bulletins', EntityType::class, [
-                'class' => Bulletin::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 

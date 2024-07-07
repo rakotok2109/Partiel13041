@@ -1,0 +1,13 @@
+{# Interface utilisateur pour créer sa proposition #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle proposition{% endblock %}
+
+{% block body %}
+    <h1>Créer une nouvelle proposition pour l'élection: {{ election.theme }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success">Créer</button>
+    {{ form_end(form) }}
+{% endblock %}

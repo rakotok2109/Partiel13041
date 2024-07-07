@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Information concernant l'Élection{% endblock %}
+
+{% block body %}
+    <h1>Information concernant l'Élection</h1>
+
+    <ul>
+        <li><strong>ID :</strong> {{ election.id }}</li>
+        <li><strong>Thème :</strong> {{ election.theme }}</li>
+        <li><strong>Quota :</strong> {{ election.quota }}</li>
+        <li><strong>Nombre de gagnants :</strong> {{ election.numberwinners }}</li>
+    </ul>
+
+    <h2>Propositions</h2>
+    <ul>
+        {% for proposition in propositions %}
+            <li>{{ proposition.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

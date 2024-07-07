@@ -1,0 +1,24 @@
+{# templates/election/determine_winners.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Propositions Gagnantes{% endblock %}
+
+{% block body %}
+    <h1>Résultats de l'élection: {{ election.theme }}</h1>
+
+    <h2>Propositions Gagnantes</h2>
+    {% if winners %}
+        <ul>
+            {% for proposition in winners %}
+                <li>{{ proposition.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Pas de propositions gagnantes pour le moment.</p>
+    {% endif %}
+
+    <h2>Informations sur l'élection</h2>
+    <p>Thème : {{ election.theme }}</p>
+    <p>Quota : {{ election.quota }}</p>
+    <p>Nombre de gagnants : {{ election.numberwinners }}</p>
+{% endblock %}

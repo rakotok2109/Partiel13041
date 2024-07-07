@@ -1,0 +1,18 @@
+{# Interface utilisateur pour voir l'ensemble des bulletins pour une élection #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bulletins de l'élection "{{ election.theme }}"</h1>
+
+    <h2>Bulletins</h2>
+    <ul>
+        {% for bulletin in bulletins %}
+            <li>
+                Bulletin {{ bulletin.id }}:
+                {% for proposition in bulletin.choice %}
+                    {{ proposition.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

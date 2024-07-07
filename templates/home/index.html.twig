@@ -1,20 +1,25 @@
+{# Interface utilisateur sur la page d'accueil cela lui permet de pouvoir accéder à la page de création d'une élection,
+de voir des informations concernant une élection en particulier, ainsi que de visualiser les élections qu'il y a.
+Il peut aussi accéder à la page pour voter donc créer son bulletin, pour le thème qu'il souhaite et par ailleurs
+de voir les résultats d'une élection en particulier#}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<h1>Accueil</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<a href="{{ path('create_election') }}" class="btn btn-primary">Créer une élection</a>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/natra/symfony/Partiel13041/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/natra/symfony/Partiel13041/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+<h2>Élections disponibles</h2>
+<ul>
+    {% for election in elections %}
+        <li>
+            <a href="{{ path('infos_election', { id: election.id }) }}">Information concernant cette élection : {{ election.theme }}</a>
+            <a href="{{ path('new_bulletin', { id: election.id }) }}" class="btn btn-success">Voter</a>
+            <a href="{{ path('election_determine_winners', { id: election.id }) }}" class="btn btn-info">Voir les résultats</a>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}
