@@ -21,10 +21,14 @@ Dans le cas où cela ne fonctionnerait pas vous avez mon projet complet dans l'a
 ## Importation de la base de donnée
 
 Le projet est relié à une base de donnée pour le stockage des différentes données. 
-Le script la créera avec les données fictives automatiquement sinon il faudra taper les commandes suivantes : 
-**php bin/console doctrine:database:create**
- 
-**php bin/console doctrine:migrations:migrate**
+Le script la créera avec les données fictives automatiquement sinon il faudra taper les commandes suivantes dans l'ordre : 
+**symfony console doctrine:database:create**
+
+**symfony console doctrine:schema:update --force**
+
+**symfony console make:migration**
+
+**symfony console doctrine:migrations:migrate**
 
 
 # Bonne Correction
